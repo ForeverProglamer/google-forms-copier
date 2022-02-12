@@ -1,16 +1,12 @@
-from __future__ import annotations
-from entities.question import Question
-from typing import List, Dict
+from entities.question import Question, Answer, SelectElement
 
 
 class SelectQuestion(Question):
 
-    def __init__(self, title: str, answer: List[Dict]):
+    def __init__(self, title: str, answer: Answer=None, select_element: SelectElement=None):
         self.title = title
         self.answer = answer
+        self.select_element = select_element
 
-    def select_answer(self) -> None:
+    def select_answer(self, answer: Answer) -> None:
         pass
-
-    def __eq__(self, question: SelectQuestion) -> bool:
-        return self.title == question.title
