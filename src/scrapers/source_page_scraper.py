@@ -4,39 +4,14 @@ from entities.radiobutton_question import RadioButtonQuestion
 from entities.text_question import TextQuestion
 from entities.checkbox_question import CheckBoxQuestion
 from entities.select_question import SelectQuestion
+from scrapers.config import headers, selectors, jscontrollers, classes
 from typing import Callable, List
 from bs4 import Tag, BeautifulSoup
 import requests
 
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0',
-    'Accept': '*/*'
-}
-
-selectors = {
-    'question_element': '.freebirdFormviewerViewNumberedItemContainer > .freebirdFormviewerViewItemsItemItem',
-    'question_title': '.freebirdFormviewerViewItemsItemItemTitle.exportItemTitle.freebirdCustomFont',
-    'radiobutton_option': '.freebirdFormviewerViewItemsRadioOptionContainer > label',
-    'radiobutton_label': '.freebirdFormviewerViewItemsRadioLabel',
-    'checkbox_option': 'label.freebirdFormviewerViewItemsCheckboxContainer',
-    'checkbox_label': '.freebirdFormviewerViewItemsCheckboxLabel',
-    'text_label': '.freebirdFormviewerViewItemsTextTextItemContainer > div',
-    'select_option': '.quantumWizMenuPaperselectOption',
-    'select_label': 'span'
-}
-
-jscontrollers = {
-    'text': 'rDGJeb', # short text, long text
-    'radiobutton': 'pkFYWb', # radio button
-    'checkbox': 'hIYTQc', # checkbox
-    'select': 'jmDACb' # select root
-}
-
-classes = {
-    'is_checked': 'isChecked',
-    'is_selected': 'isSelected'
-}
+selectors = selectors['src']
+jscontrollers = jscontrollers['src']
 
 class SourcePageScraper(AbstractScraper):
 

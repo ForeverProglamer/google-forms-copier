@@ -4,6 +4,7 @@ from entities.radiobutton_question import RadioButtonQuestion
 from entities.text_question import TextQuestion
 from entities.checkbox_question import CheckBoxQuestion
 from entities.select_question import SelectQuestion
+from scrapers.config import selectors, jscontrollers
 from typing import Callable, List
 from selenium.webdriver.remote.webelement import WebElement
 from selenium import webdriver
@@ -12,27 +13,8 @@ from selenium.common.exceptions import NoSuchElementException
 import os
 
 
-selectors = {
-    'question_element': '.freebirdFormviewerViewNumberedItemContainer div.m2',
-    'general_div': 'div[jscontroller="sWGJ4b"] div[jscontroller]',
-    'question_title': '.freebirdFormviewerComponentsQuestionBaseTitle',
-    'radiobutton_option': '.freebirdFormviewerComponentsQuestionRadioChoice > label',
-    'radiobutton_label': '.freebirdFormviewerComponentsQuestionRadioLabel',
-    'checkbox_option': 'label.docssharedWizToggleLabeledContainer.freebirdFormviewerComponentsQuestionCheckboxCheckbox',
-    'select': '.quantumWizMenuPaperselectOptionList',
-    'select_option': '.quantumWizMenuPaperselectOption.appsMaterialWizMenuPaperselectOption.freebirdThemedSelectOptionDarkerDisabled.exportOption',
-    'select_clickable_option': 'div[jsname="V68bde"] > .appsMaterialWizMenuPaperselectOptionSeparator ~.quantumWizMenuPaperselectOption',
-    'short_text': 'input',
-    'long_text': 'textarea'
-    
-}
-
-jscontrollers = {
-    'text': 'oCiKKc',
-    'radiobutton': 'UmOCme',
-    'checkbox': 'sW52Ae',
-    'select': 'liFoG'
-}
+selectors = selectors['dest']
+jscontrollers = jscontrollers['dest']
 
 class DestinationPageScraper(AbstractScraper):
 
@@ -66,14 +48,14 @@ class DestinationPageScraper(AbstractScraper):
             return self._extract_question_with_text
 
     def _get_question_title(self, question_element: WebElement) -> str:
-        return question_element.find_element(By.CSS_SELECTOR, selectors['question_title']).text
+        return question_element.find_element(By.CSS_SELECTOR, selectors['question_title']).get_attribute('textContent')
 
     def _extract_question_with_radiobutton(self, question_element: WebElement) -> RadioButtonQuestion:
         title = self._get_question_title(question_element)
         clickable_options = question_element.find_elements(By.CSS_SELECTOR, selectors['radiobutton_option'])
         select_element = list(map(
             lambda option: {
-                'label': option.find_element(By.CSS_SELECTOR, selectors['radiobutton_label']).text,
+                'label': option.find_element(By.CSS_SELECTOR, selectors['radiobutton_label']).get_attribute('textContent'),
                 'element': option
             },
             clickable_options
@@ -86,7 +68,7 @@ class DestinationPageScraper(AbstractScraper):
         clickable_options = question_element.find_elements(By.CSS_SELECTOR, selectors['checkbox_option'])
         select_element = list(map(
             lambda option: {
-                'label': option.text,
+                'label': option.get_attribute('textContent'),
                 'element': option
             },
             clickable_options
@@ -108,9 +90,6 @@ class DestinationPageScraper(AbstractScraper):
 
     def _extract_question_with_select(self, question_element: WebElement) -> SelectQuestion:
         title = self._get_question_title(question_element)
-        select_element = question_element.find_element(By.CSS_SELECTOR, selectors['select'])
-        # options = question_element.find_elements(By.CSS_SELECTOR, selectors['select_option'])[1:]
-        # answer = [{'label': option.get_attribute('data-value')} for option in options]
-
-        print({'title': title, 'select_element': select_element})
-        return SelectQuestion(title, select_element=select_element)
+        
+        print({'title': title, 'select_element': question_element})
+        return SelectQuestion(title, select_element=question_element)
