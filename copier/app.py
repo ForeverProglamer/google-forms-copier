@@ -116,7 +116,5 @@ def run():
 
     logger.addHandler(handler)
 
-    print(logging.root.manager.loggerDict)
-
-    window.show()    
+    window.show()
     sys.exit(app.exec())

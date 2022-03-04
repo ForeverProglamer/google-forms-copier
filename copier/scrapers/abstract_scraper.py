@@ -12,9 +12,6 @@ import logging
 
 class AbstractScraper(ABC):
     logger = logging.getLogger('copier.scrapers.logger')
-    
-    # todo consider moving class variable to instance variable
-    url: str
 
     @abstractmethod
     def extract_all_questions(self) -> List[Question]:

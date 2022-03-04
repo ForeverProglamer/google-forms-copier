@@ -10,7 +10,7 @@ src_url3 = 'https://docs.google.com/forms/d/e/1FAIpQLScg4TI1LnKkAYp2joyiCT_dGAkN
 class TestSourcePageScraper(unittest.TestCase):
 
     def test_extract_all_questions(self):
-        '''Return value is not empty list and each element type is Question'''
+        '''Checks if return value have elements and each element type is Question'''
 
         def test(scraper: SourcePageScraper) -> None:
             questions = scraper.extract_all_questions()

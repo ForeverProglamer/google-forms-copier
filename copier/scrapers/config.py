@@ -23,12 +23,11 @@ selectors = {
     },
 
     'dest': {
-        'question_element': '.freebirdFormviewerViewNumberedItemContainer div.m2',
-        'general_div': 'div[jscontroller="sWGJ4b"] div[jscontroller]',
-        'question_title': '.freebirdFormviewerComponentsQuestionBaseTitle',
-        'radiobutton_option': '.freebirdFormviewerComponentsQuestionRadioChoice > label',
-        'radiobutton_label': '.freebirdFormviewerComponentsQuestionRadioLabel',
-        'checkbox_option': 'label.docssharedWizToggleLabeledContainer.freebirdFormviewerComponentsQuestionCheckboxCheckbox',
+        'question_element': 'div[jscontroller="sWGJ4b"]',
+        'general_div': 'div[jscontroller]',
+        'question_title': 'div[role="heading"]',
+        'radiobutton_option': '.docssharedWizToggleLabeledContainer',
+        'checkbox_option': '.docssharedWizToggleLabeledContainer',
         'select': '.quantumWizMenuPaperselectOptionList',
         'select_option': 'div[jsname="V68bde"] .quantumWizMenuPaperselectOption',
         'select_label': 'span',

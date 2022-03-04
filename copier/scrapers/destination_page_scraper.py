@@ -20,12 +20,14 @@ jscontrollers = jscontrollers['dest']
 
 class DestinationPageScraper(AbstractScraper):
     def __init__(self, url: str):
-        path = os.path.join('resources', 'geckodriver.exe')
+        path = os.path.join('copier', 'resources', 'geckodriver.exe')
         self.driver = webdriver.Firefox(executable_path=path)
+        self.logger.debug(f'Requesting {url}')
         self.driver.get(url)
 
     def extract_all_questions(self) -> List[Question]:
         question_elements = self.driver.find_elements(By.CSS_SELECTOR, selectors['question_element'])
+        self.logger.debug(f'{len(question_elements)} question elements founded on page')
 
         questions = []
         for question_element in question_elements:
@@ -33,8 +35,7 @@ class DestinationPageScraper(AbstractScraper):
             try:
                 extract = self._get_question_extractor(general_element)
             except Exception as e:
-                print(e)
-                continue
+                self.logger.error(e)
             else:
                 questions.append(extract(question_element))
 
@@ -61,7 +62,7 @@ class DestinationPageScraper(AbstractScraper):
         clickable_options = question_element.find_elements(By.CSS_SELECTOR, selectors['radiobutton_option'])
         select_element = list(map(
             lambda option: {
-                'label': option.find_element(By.CSS_SELECTOR, selectors['radiobutton_label']).get_attribute('textContent'),
+                'label': option.get_attribute('textContent'),
                 'element': option
             },
             clickable_options
