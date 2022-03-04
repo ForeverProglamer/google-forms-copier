@@ -3,9 +3,11 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Union
 from selenium.webdriver.remote.webelement import WebElement
 
+
 Answer = Union[str, List[str]]
 SelectElement = Union[List[Dict[str, Union[str, WebElement]]], WebElement]
 
+# todo consider moving class variables to instance variables
 class Question(ABC):
     _title: str
     _answer: Union[Answer, None]

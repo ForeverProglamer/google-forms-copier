@@ -1,12 +1,11 @@
-from entities.question import Question, Answer, SelectElement
-from scrapers.config import selectors
+from .question import Question, Answer, SelectElement
+from copier.scrapers.config import selectors
 from selenium.webdriver.common.by import By
 
 
 selectors = selectors['dest']
 
 class SelectQuestion(Question):
-
     def __init__(self, title: str, answer: Answer=None, select_element: SelectElement=None):
         self._title = title
         self._answer = answer

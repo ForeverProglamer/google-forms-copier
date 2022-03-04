@@ -4,20 +4,21 @@ headers = {
 }
 
 classes = {
-    'is_checked': 'isChecked',
-    'is_selected': 'isSelected'
+    'is_checked': 'N2RpBe',
 }
 
 selectors = {
     'src': {
-        'question_element': '.freebirdFormviewerViewNumberedItemContainer > .freebirdFormviewerViewItemsItemItem',
-        'question_title': '.freebirdFormviewerViewItemsItemItemTitle.exportItemTitle.freebirdCustomFont',
-        'radiobutton_option': '.freebirdFormviewerViewItemsRadioOptionContainer > label',
-        'radiobutton_label': '.freebirdFormviewerViewItemsRadioLabel',
-        'checkbox_option': 'label.freebirdFormviewerViewItemsCheckboxContainer',
-        'checkbox_label': '.freebirdFormviewerViewItemsCheckboxLabel',
-        'text_label': '.freebirdFormviewerViewItemsTextTextItemContainer > div',
-        'select_option': '.quantumWizMenuPaperselectOption',
+        'question_element': 'div[role="listitem"] > div[jscontroller]',
+        'question_title': 'div[role="heading"]',
+        'radiobutton_option': '.docssharedWizToggleLabeledContainer',
+        'radiobutton_label': 'span',
+        'checkbox_option': '.ujnDW',
+        'checkbox_checked_option': 'div[aria-checked="true"]',
+        'checkbox_label': '.aDTYNe.snByac.gjE2o',
+        'text_label': '.Mh5jwe.JqSWld.yqQS1',
+        'long_text_label': '.q4tvle.JqSWld.yqQS1',
+        'select_option': 'div[jsname="wQNmvb"]',
         'select_label': 'span'
     },
 

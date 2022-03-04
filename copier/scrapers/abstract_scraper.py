@@ -1,15 +1,19 @@
 from abc import ABC, abstractmethod
-from entities.question import Question
-from entities.radiobutton_question import RadioButtonQuestion
-from entities.text_question import TextQuestion
-from entities.checkbox_question import CheckBoxQuestion
-from entities.select_question import SelectQuestion
+from copier.entities.question import Question
+from copier.entities.radiobutton_question import RadioButtonQuestion
+from copier.entities.text_question import TextQuestion
+from copier.entities.checkbox_question import CheckBoxQuestion
+from copier.entities.select_question import SelectQuestion
 from typing import Callable, List, Union
 from bs4 import Tag
 from selenium.webdriver.remote.webelement import WebElement
+import logging
 
 
 class AbstractScraper(ABC):
+    logger = logging.getLogger('copier.scrapers.logger')
+    
+    # todo consider moving class variable to instance variable
     url: str
 
     @abstractmethod
