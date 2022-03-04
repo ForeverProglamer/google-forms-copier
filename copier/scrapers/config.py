@@ -9,7 +9,7 @@ classes = {
 
 selectors = {
     'src': {
-        'question_element': 'div[role="listitem"] > div[jscontroller]',
+        'question_element': 'div[role="listitem"][class] > div[jscontroller]',
         'question_title': 'div[role="heading"]',
         'radiobutton_option': '.docssharedWizToggleLabeledContainer',
         'radiobutton_label': 'span',
@@ -28,8 +28,8 @@ selectors = {
         'question_title': 'div[role="heading"]',
         'radiobutton_option': '.docssharedWizToggleLabeledContainer',
         'checkbox_option': '.docssharedWizToggleLabeledContainer',
-        'select': '.quantumWizMenuPaperselectOptionList',
-        'select_option': 'div[jsname="V68bde"] .quantumWizMenuPaperselectOption',
+        'select': 'div[jsname="d9BH4c"]',
+        'select_option': 'div[jsname="V68bde"] > div[jsname="wQNmvb"]',
         'select_label': 'span',
         'short_text': 'input',
         'long_text': 'textarea'

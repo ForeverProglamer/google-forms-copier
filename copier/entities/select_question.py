@@ -22,5 +22,9 @@ class SelectQuestion(Question):
             },
             options
         ))
-        option_to_select = next(filter(lambda opt: opt['label'] == answer, options_with_labels))
-        option_to_select['element'].click()
+        try:
+            option_to_select = next(filter(lambda opt: opt['label'] == answer, options_with_labels))
+        except StopIteration:
+            pass
+        else:
+            option_to_select['element'].click()
