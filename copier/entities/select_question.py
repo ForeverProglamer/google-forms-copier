@@ -1,6 +1,8 @@
+from selenium.webdriver.common.by import By
+from time import sleep
+
 from .question import Question, Answer, SelectElement
 from copier.scrapers.config import selectors
-from selenium.webdriver.common.by import By
 
 
 selectors = selectors['dest']
@@ -14,6 +16,7 @@ class SelectQuestion(Question):
     def select_answer(self, answer: Answer) -> None:
         clickable_select = self._select_element.find_element(By.CSS_SELECTOR, selectors['select'])
         clickable_select.click()
+        sleep(.1)
         options = self._select_element.find_elements(By.CSS_SELECTOR, selectors['select_option'])
         options_with_labels = list(map(
             lambda opt: {
@@ -24,7 +27,8 @@ class SelectQuestion(Question):
         ))
         try:
             option_to_select = next(filter(lambda opt: opt['label'] == answer, options_with_labels))
-        except StopIteration:
-            pass
+        except StopIteration as e:
+            print(e)
         else:
+            sleep(.1)
             option_to_select['element'].click()

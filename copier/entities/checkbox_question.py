@@ -1,3 +1,5 @@
+from time import sleep
+
 from .question import Question, Answer, SelectElement
 
 
@@ -10,4 +12,5 @@ class CheckBoxQuestion(Question):
     def select_answer(self, answer: Answer) -> None:
         options_to_select = list(filter(lambda option: option['label'] in answer, self._select_element))
         for opt in options_to_select:
+            sleep(0.1)
             opt['element'].click()

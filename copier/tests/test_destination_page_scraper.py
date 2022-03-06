@@ -1,5 +1,6 @@
 import unittest
-from copier.scrapers.destination_page_scraper import DestinationPageScraper
+
+from copier.scrapers.destination_page_scraper import DestinationPageScraper, DriverType
 from copier.entities.question import Question
 
 
@@ -16,4 +17,4 @@ class TestDestinationPageScraper(unittest.TestCase):
             self.assertNotEqual(questions, [])
             self.assertTrue(all([isinstance(q, Question) for q in questions]))
 
-        test(DestinationPageScraper(dest_url2))
+        test(DestinationPageScraper(dest_url2, DriverType.CHROME))

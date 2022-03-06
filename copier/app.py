@@ -1,15 +1,16 @@
-from PyQt5 import QtWidgets
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from copier.ui.design import Ui_MainWindow
-
-import copier.scrapers.logger
-from copier.scrapers.source_page_scraper import SourcePageScraper
-from copier.scrapers.destination_page_scraper import DestinationPageScraper
-from copier.entities.question import Question
+from PyQt5 import QtWidgets
+from selenium.common.exceptions import InvalidElementStateException
 
 from typing import List, Union
+from time import sleep
 import logging
 import sys
+
+from copier.scrapers.destination_page_scraper import DestinationPageScraper, DriverType
+from copier.scrapers.source_page_scraper import SourcePageScraper
+from copier.entities.question import Question
 
 
 src_url = 'https://docs.google.com/forms/d/e/1FAIpQLScxIXHLGMp1Yq8GG3AfhYTRBxRTHTzDpzkbCDvLYe60_JArXA/viewscore?viewscore=AE0zAgA4kyXwcDpvREbb0iYxBTytUwiUQPGyEMLi-8YtFxmbNBzfYTi7y55JA2YlKInu3sw'
@@ -21,19 +22,29 @@ logger.setLevel(logging.INFO)
 class Worker(QObject):
     finished = pyqtSignal()
 
-    def __init__(self, src_url: str, dest_url: str):
+    def __init__(self, src_url: str, dest_url: str, driver_type: DriverType):
         super().__init__()
         self.src_url = src_url
         self.dest_url = dest_url
+        self.driver_type = driver_type
 
     def run(self) -> None:
         logger.info('Extracting answers from source page...')
-        src_scraper = SourcePageScraper(self.src_url)
-        src_questions = src_scraper.extract_all_questions()
-        logger.info(f'{len(src_questions)} source page answers are successfully extracted!')
 
+        src_questions = []
+        try:
+            src_scraper = SourcePageScraper(self.src_url)
+        except TimeoutError as e:
+            logger.info(e)
+            self.finished.emit()
+            return
+        else:
+            src_questions = src_scraper.extract_all_questions()
+            
+        logger.info(f'{len(src_questions)} source page answers are successfully extracted!')
+            
         logger.info('Extracting question elements from destination page...')
-        dest_scraper = DestinationPageScraper(self.dest_url)
+        dest_scraper = DestinationPageScraper(self.dest_url, self.driver_type)
         dest_questions = dest_scraper.extract_all_questions()
         logger.info(f'{len(dest_questions)} question elements from destination page are successfully extracted!')
 
@@ -55,7 +66,12 @@ class Worker(QObject):
         for src_question in source_page_questions:
             dest_question = find_question_in_list(src_question, destination_page_questions)
             if dest_question:
-                dest_question.select_answer(src_question.get_answer())
+                try:
+                    dest_question.select_answer(src_question.get_answer())
+                    sleep(0.1)
+                except InvalidElementStateException as e:
+                    logger.info(f'An error occured: {e}. Try to run again')
+                    return
 
 
 class Window(QtWidgets.QMainWindow):
@@ -64,6 +80,10 @@ class Window(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         
+        self.ui.radioButton.setChecked(True)
+        self.ui.radioButton.driver = DriverType.FIREFOX
+        self.ui.radioButton_2.driver = DriverType.CHROME
+
         self.ui.textEdit.setReadOnly(True)
 
         self.ui.lineEdit.setText(src_url)
@@ -74,12 +94,19 @@ class Window(QtWidgets.QMainWindow):
     def get_text_edit(self) -> QtWidgets.QTextEdit:
         return self.ui.textEdit
 
+    def get_data_from_radiobutton(self) -> DriverType:
+        if self.ui.radioButton.isChecked():
+            return self.ui.radioButton.driver
+        if self.ui.radioButton_2.isChecked():
+            return self.ui.radioButton_2.driver
+
     def start_button_action(self):
         src_url = self.ui.lineEdit.text()
         dest_url = self.ui.lineEdit_2.text()
+        driver_type = self.get_data_from_radiobutton()
 
         self.thread = QThread()
-        self.worker = Worker(src_url, dest_url)
+        self.worker = Worker(src_url, dest_url, driver_type)
         self.worker.moveToThread(self.thread)
 
         self.thread.started.connect(self.worker.run)
