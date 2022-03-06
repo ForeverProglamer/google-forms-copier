@@ -30,7 +30,6 @@ class DriverType(Enum):
     FIREFOX = 1
     CHROME = 2
         
-# todo add waits for finding elements
 
 class DestinationPageScraper(AbstractScraper):
     def __init__(self, url: str, driver_type: DriverType):

@@ -1,18 +1,19 @@
-from .abstract_scraper import AbstractScraper
-from .config import headers, selectors, jscontrollers, classes
-from copier.entities.question import Question
-from copier.entities.radiobutton_question import RadioButtonQuestion
-from copier.entities.text_question import TextQuestion
-from copier.entities.checkbox_question import CheckBoxQuestion
-from copier.entities.select_question import SelectQuestion
-from typing import Callable, List
 from bs4 import Tag, BeautifulSoup
 import requests
+
+from typing import Callable, List
+
+from copier.entities.radiobutton_question import RadioButtonQuestion
+from .config import headers, selectors, jscontrollers, classes
+from copier.entities.checkbox_question import CheckBoxQuestion
+from copier.entities.select_question import SelectQuestion
+from copier.entities.text_question import TextQuestion
+from .abstract_scraper import AbstractScraper
+from copier.entities.question import Question
 
 
 selectors = selectors['src']
 jscontrollers = jscontrollers['src']
-
 
 class SourcePageScraper(AbstractScraper):
     def __init__(self, url: str):
